@@ -24,17 +24,12 @@ public:
         if(k==0) return head;
 
         temp=head;
-        int cnt=0;
-        while(cnt<k){
+        int cnt=1;
+        while(cnt<n-k){
             cnt++;
             temp=temp->next;
         }
-        ListNode* newEnd=head;
-        while(temp->next!=NULL){
-            newEnd=newEnd->next;
-            temp=temp->next;
-        }
-
+       ListNode* newEnd=temp;
         ListNode* newHead=newEnd->next;
         newEnd->next=NULL;
 
