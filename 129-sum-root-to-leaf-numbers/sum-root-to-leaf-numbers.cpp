@@ -11,11 +11,11 @@
  */
 class Solution {
 public:
-    void getNumbers(TreeNode* root,int num,vector<int>&ans){
+    void getNumbers(TreeNode* root,int num,int &ans){
         if(!root) return;
         if(!root->left && !root->right){
             num=num*10+(root->val);
-            ans.push_back(num);
+            ans+=num;
             return;
         } 
 
@@ -27,14 +27,10 @@ public:
     }
     int sumNumbers(TreeNode* root) {
         if(!root) return 0;
-        vector<int>ans;
+        int ans=0;
         int num=0;
         getNumbers(root,num,ans);
 
-        int sum=0;
-        for(int i=0;i<ans.size();i++){
-            sum+=ans[i];
-        }
-        return sum;
+       return ans;
     }
 };
