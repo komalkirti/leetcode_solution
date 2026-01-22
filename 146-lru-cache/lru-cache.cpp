@@ -1,74 +1,45 @@
 class LRUCache {
 public:
-    class Node{
-    public:
-        int k,v;
-        Node* prev;
-        Node* next;
-
-        Node(int key ,int val){
-          k=key;
-          v=val;
-          prev=next=NULL;
-        }
-    };
-    int capacity;
-    map<int,Node*>m;
-    Node* head;
-    Node* tail;
-
-   
+   unordered_map<int, pair<int, list<int>::iterator>>m;
+    int c;
+    list<int>v;
     LRUCache(int capacity) {
-        this->capacity = capacity;
-        head=new Node(-1,-1);
-        tail=new Node(-1,-1);
-        head->next=tail;
-        tail->prev=head;
-
-    }
-
-    void addNode(int k,int v){
-        Node* newNode= new Node(k,v);
-        m[k]=newNode;
-        Node* curStart=head->next;
-        head->next=newNode;
-        newNode->prev=head;
-        newNode->next=curStart;
-        curStart->prev=newNode;
-    }
-
-    void deleteNode(Node* oldNode){
-        Node* oldPrev=oldNode->prev;
-        Node* oldNext = oldNode->next;
-        oldPrev->next =oldNext;
-        oldNext->prev=oldPrev;
-        m.erase(oldNode->k);
-        delete oldNode;
+        c=capacity;
+        
     }
     
     int get(int key) {
-
-        if(m.find(key)!=m.end()){
-            int val = m[key]->v;
-            deleteNode(m[key]);
-            addNode(key,val);
-            return val;
+        
+        if(m.count(key)!=0){
+            v.erase(m[key].second);
+            v.push_front(key);
+            m[key]={m[key].first,v.begin()};
+            return m[key].first;
         }
         return -1;
         
     }
     
     void put(int key, int value) {
-       
-        if(m.find(key)!=m.end()){
-            Node* oldNode = m[key];
-            deleteNode(oldNode);
+        
+        if(m.count(key)!=0){
+            v.erase(m[key].second);
+            v.push_front(key);
+             m[key]={value, v.begin()};
+            return ;
         }
-        if(m.size()==this->capacity){
-            deleteNode(tail->prev);
+        
+        if(m.size()==c){
+            m.erase(v.back());
+            v.pop_back();
         }
-        addNode(key,value);
+        v.push_front(key);
+        m[key]={value, v.begin()};
+        
+        
+        
     }
+
 };
 
 /**
